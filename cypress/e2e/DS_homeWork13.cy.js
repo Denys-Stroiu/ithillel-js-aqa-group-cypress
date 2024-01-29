@@ -58,11 +58,26 @@ describe("Book shop", () => {
     );
   });
 
-  it("Book shop request", () => {
-    cy.request("https://demoqa.com/BookStore/v1/Book?ISBN=9781449325862").then(
-      (resp) => {
-        expect(resp.status).to.eq(200);
+  it("Book shop request with data check", () => {
+    cy.request({
+      url: 'https://demoqa.com/BookStore/v1/Book',
+      qs: {
+        ISBN: '9781449325862'
       }
-    );
+    }).then((resp) => {
+      expect(resp.status).to.eq(200);
+
+      expect(resp.body.author).to.eq('Richard E. Silverman');
+      expect(resp.body.isbn).to.eq('9781449325862');
+      expect(resp.body.title).to.eq('Git Pocket Guide');
+      expect(resp.body.subTitle).to.eq('A Working Introduction');
+      expect(resp.body.author).to.eq('Richard E. Silverman');
+      expect(resp.body.publisher).to.eq("O'Reilly Media");
+      expect(resp.body.pages).to.eq(234);
+      expect(resp.body.description).to.eq('This pocket guide is the perfect on-the-job companion to Git, the distributed version control system. It provides a compact, readable introduction to Git for new users, as well as a reference to common commands and procedures for those of you with Git exp');
+      expect(resp.body.website).to.eq('http://chimera.labs.oreilly.com/books/1230000000561/index.html');
+    });
   });
 });
+
+
